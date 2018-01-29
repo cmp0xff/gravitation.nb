@@ -24,31 +24,26 @@ BeginPackage["Gravitation`"]
 
 (*Functions for intrinsic quantities*)
 
-ChristoffelSymbol1st::usage="ChristoffelSymbol1st[g,x], with g a n\[Times]n-matrix
-  (metric with lower indices) and x n-vector of coordinates, gives the Christoffel symbol of the first kind
-  kind (three lower indices)."
+ChristoffelSymbol1st::usage="ChristoffelSymbol1st[g,x], with g an n\[Times]n-matrix (metric with lower indices) and x n-vector of coordinates, gives the Christoffel symbol of the first kind (three lower indices)."
 
-ChristoffelSymbol2nd::usage="ChristoffelSymbol2nd[g,x], with g a n\[Times]n-matrix
-  (metric with lower indices) and x
-  n-vector of coordinates, gives the Christoffel symbol of the second kind
-  kind (1st upper, two lower indices)."
+ChristoffelSymbol2nd::usage="ChristoffelSymbol2nd[g,x], with g an n\[Times]n-matrix (metric with lower indices) and x n-vector of coordinates, gives the Christoffel symbol of the second kind (1st upper, two lower indices)."
 
-RiemannTensor::useage="RiemannTensor[g,x], with g a n\[Times]n-matrix
+RiemannTensor::useage="RiemannTensor[g,x], with g an n\[Times]n-matrix
   (metric with lower indices) and x n-vector of
   coordinates, gives the Riemann curvature tensor (1st upper, three lower
   indices)."
 
-RicciTensor::usage="RicciTensor[g,x], with g a n\[Times]n-matrix
+RicciTensor::usage="RicciTensor[g,x], with g an n\[Times]n-matrix
   (metric with lower indices) and x n-vector of
   coordinates, gives the Ricci tensor (two lower symmetric indices)."
 
-RicciScalar::usage="RicciScalar[g,x], with g a n\[Times]n-matrix
+RicciScalar::usage="RicciScalar[g,x], with g an n\[Times]n-matrix
   (metric with lower indices) and x
   n-vector of coordinates, gives the Ricci scalar."
 
-EinsteinTensor::usage="EinsteinTensor[g,x] with g a n\[Times]n-matrix
+EinsteinTensor::usage="EinsteinTensor[g,x] with g an n\[Times]n-matrix
   (metric with lower indices) and x n-vector (the coordinates)
-  gives the Einstein tensor (a n\[Times]n-matrix) with lower indices."
+  gives the Einstein tensor (an n\[Times]n-matrix) with lower indices."
 
 (*Functions for extrinsic quantities*)
 
@@ -63,7 +58,11 @@ MetricTensorSurface::usage="MetricTensorSurface[g,x,n,sV] with g a n\[Times]n-ma
 
 (*Suppose the metric is d+1 decomposed; nUpp=n^\[Mu]. I believe these are to be improved.*)
 
-NormalVector::usage="NormalVector[g,x,i,sV] with g a n\[Times]n-matrix
+NormalCovector::usage="NormalCovector[g,x,i,sV] with g an n\[Times]n-matrix
+(metric with lower indices), x n-vector (the coordinates), i integer index (the dimension to be separated)... sV the
+square of the normal vector... gives the unit normal covector"
+
+NormalVector::usage="NormalVector[g,x,i,sV] with g an n\[Times]n-matrix
   (metric with lower indices), x n-vector (the coordinates), i integer index (the dimension to be separated)... sV the
 square of the normal vector... gives the unit normal vector"
 
@@ -98,6 +97,8 @@ MetricTensorDecomposed[lapse_,shift_,hLow_]:=ArrayFlatten[{{TensorContract[hLow\
 MetricTensorSurface[gLow_List,xxx_List,norVec_List,sgnVec_]:=gLow-sgnVec*(#\[TensorProduct]#&)[gLow.norVec];
 
 (*Suppose the metric is d+1 decomposed; nUpp=n^\[Mu]. I believe these are to be improved.*)
+
+NormalCovector[gLow_List,xxx_List,ind_Integer,sgnVec_]:=Array[If[#==ind,sgnVec/Sqrt[sgnVec Inverse[gLow][[ind,ind]]],0]&,Length@gLow];
 
 NormalVector[gLow_List,xxx_List,ind_Integer,sgnVec_]:=-1/Sqrt[sgnVec*#[[ind,ind]]] #[[ind]]&[Inverse[gLow]];
 
