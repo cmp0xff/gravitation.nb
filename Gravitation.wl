@@ -1,7 +1,6 @@
 (* ::Package:: *)
 
 (********1*********2*********3*********4*********5*********6*********7*****
- * GREAT.m = General Relativity, Einstein & All That 4 Mathematica
  * Package written by Yi-Fan Wang: yfwang@thp.uni-koeln.de
  *                                 Universit\[ADoubleDot]t zu K\[ODoubleDot]ln
  *                                 thp.uni-koeln.de/~yfwang
@@ -24,69 +23,150 @@ BeginPackage["Gravitation`"]
 
 (*Functions for intrinsic quantities*)
 
+VolumeElement(*[gLow_List?MatrixQ,sgnBulk_Integer?(#==1||#==-1&)]:=\
+	Sqrt[sgnBulk Det@gLow];*)
+
+VolumeElementSeries(*[gLow_List?MatrixQ,sgnBulk_Integer?(#==1||#==-1&),eps_List]:=\
+	Series[VolumeElement[gLow,sgnBulk],eps];*)
+
 InverseMetricSeries
 
-ChristoffelSymbol1st::usage="ChristoffelSymbol1st[g,x], with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List), gives the Christoffel symbol of the first kind (three lower indices)."
+ChristoffelSymbol1st::usage=\
+	"ChristoffelSymbol1st[g,x], with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List), gives the Christoffel \
+symbol of the first kind (three lower indices)."
 
 ChristoffelSymbol1stSeries
 
-ChristoffelSymbol2nd::usage="ChristoffelSymbol2nd[g,x], with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List), gives the Christoffel symbol of the second kind (1st upper, two lower indices)."
+ChristoffelSymbol2nd::usage=\
+	"ChristoffelSymbol2nd[g,x], with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List), gives the Christoffel \
+symbol of the second kind (1st upper, two lower indices)."
 
 ChristoffelSymbol2ndSeries
 
-LeviCivitaDVector::usage="[gLow_List,xxx_List,vec_List]:=D[vec,xxx]+ChristoffelSymbol2nd[gLow,xxx].vec;"
+LeviCivitaDVector
 
-(*LeviCivitaDVectorSeries*)
+LeviCivitaDVectorSeries
 
-LeviCivitaDCovector::usage="[gLow_List,xxx_List,covec_List]:=D[covec,xxx]-covec.ChristoffelSymbol2nd[gLow,xxx];"
+LeviCivitaDCovector
 
-(*LeviCivitaDCovectorSeries*)
+LeviCivitaDCovectorSeries
 
-RiemannTensor::useage="RiemannTensor[g,x], with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List), gives the (1,3) Riemann curvature tensor (D\[Times]D\[Times]D\[Times]D List)."
+RiemannTensor::useage=\
+	"RiemannTensor[g,x], with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List), gives the (1,3) Riemann \
+curvature tensor (D\[Times]D\[Times]D\[Times]D List)."
 
-(*RiemannTensorSeries*)
+RiemannTensorSeries
 
-RicciTensor::usage="RicciTensor[g,x], with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List), gives the (0,2) Ricci tensor (D\[Times]D Matrix)."
+RicciTensor::usage=
+	"RicciTensor[g,x], with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List), gives the (0,2) Ricci \
+tensor (D\[Times]D Matrix)."
 
-(*RicciTensorSeries*)
+RicciTensorSeries
 
-RicciScalar::usage="RicciScalar[g,x], with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List), gives the Ricci scalar."
+RicciScalar::usage=\
+	"RicciScalar[g,x], with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List), gives the Ricci scalar."
 
-(*RicciScalarSeries*)
+RicciScalarSeries
 
-EinsteinTensor::usage="EinsteinTensor[g,x] with g components of the (0,2) metric tensor (D\[Times]D Matrix) and x the coordinates (D List) gives the (0,2) Einstein tensor (D\[Times]D Matrix)."
+EinsteinTensor::usage=\
+	"EinsteinTensor[g,x] with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix) and x the coordinates (D List) gives the (0,2) Einstein \
+tensor (D\[Times]D Matrix)."
 
-(*EinsteinTensorSeries*)
+EinsteinTensorSeries
 
 (*Functions for extrinsic quantities*)
 
 (*Lapse etc known*)
 
-MetricTensor4::usage="MetricTensorDecomposed[lapse,shift,hLow] with lapse a number, shift a vector (d List), hLow components of the (0,2) metric tensor (d\[Times]d Matrix), gives a D\[Times]D (0,2) metric (D\[Times]D Matrix, D=d+1)."(* It has only been test for for (d+1) decomposition."*)
+MetricTensor4ArnowittDeserMisner::usage=\
+	"MetricTensorADM[lapse,shift,hLow] with lapse a number, shift a vector \
+(d List), hLow components of the (0,2) metric tensor (d\[Times]d Matrix), \
+gives a D\[Times]D (0,2) metric (D\[Times]D Matrix, D=d+1)."
+(* It has only been test for for (d+1) decomposition."*)
 
-MetricTensor3Vector::usage="MetricTensorSurface[g,nVec,s] with g components of the (0,2) metric tensor (D\[Times]D Matrix), n unit normal vector (D List), sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives a d\[Times]d (0,2) metric (D\[Times]D Matrix, D=d+1)."
+MetricTensor4Direct
 
-MetricTensor3Covector::usage="MetricTensorSurface[g,nCvt,sV] with g components of the (0,2) metric tensor (D\[Times]D Matrix), n unit normal covector (D List), sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives a d\[Times]d (0,2) metric (D\[Times]D Matrix, D=d+1)."
+MetricTensor34Vector::usage=\
+	"MetricTensorSurface[g,nVec,s] with g components of the (0,2) metric \
+tensor (D\[Times]D Matrix), n unit normal vector (D List), sC=1 for space-like \
+hypersurface and -1 for time-like hypersurface, gives a d\[Times]d (0,2) \
+metric (D\[Times]D Matrix, D=d+1)."
 
-MetricTensor3Index::usage="MetricTensor3Index[g,i,sC] with g components of the (0,2) metric tensor (D\[Times]D Matrix), i index (Integer), sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives a d\[Times]d (0,2) metric (D\[Times]D Matrix, D=d+1)."
+MetricTensor34Covector::usage=\
+	"MetricTensorSurface[g,nCvt,sV] with g components of the (0,2) metric \
+tensor (D\[Times]D Matrix), n unit normal covector (D List), sC=1 for \
+space-like hypersurface and -1 for time-like hypersurface, gives a d\[Times]d \
+(0,2) metric (D\[Times]D Matrix, D=d+1)."
 
-(*Suppose the metric is d+1 decomposed; nUpp=n^\[Mu]. I believe these are to be improved.*)
+MetricTensor34Index::usage=
+	"MetricTensor34Index[g,i,sC] with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix), i index (Integer), sC=1 for space-like hypersurface and \
+-1 for time-like hypersurface, gives a d\[Times]d (0,2) metric \
+(D\[Times]D Matrix, D=d+1)."
 
-NormalCovector::usage="NormalCovector[g,i,sC] with g components of the (0,2) metric tensor (D\[Times]D Matrix), i coordinate index (Integer), sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives the unit covector orthogonal to the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
+MetricTensor3Index
 
-NormalVector::usage="NormalVector[g,i,sC] with g components of the (0,2) metric tensor (D\[Times]D Matrix), i coordinate index (Integer), sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives the unit vector orthogonal to the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
+(* Suppose the metric is d+1 decomposed; nUpp=n^\[Mu]. I believe these are to be 
+ * improved.
+*)
 
-KruemmungsTensor4Index::usage="KruemmungsTensor4Index[g,x,sB,i,sC] with g components of the bulk (0,2) metric tensor (D\[Times]D Matrix), x the coordinates (D List), sB the signature of the bulk metric, i coordinate index and sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives the (0,2) second fundamental form of the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C (D\[Times]D Matrix)."
+NormalCovector::usage=\
+	"NormalCovector[g,i,sC] with g components of the (0,2) metric tensor \
+(D\[Times]D Matrix), i coordinate index (Integer), sC=1 for space-like \
+hypersurface and -1 for time-like hypersurface, gives the unit covector \
+orthogonal to the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
 
-KruemmungsScalar4Index::usage="KruemmungsScalar4Index[g,x,sB,i,sC] with g components of the bulk (0,2) metric tensor (D\[Times]D Matrix), x the coordinates (D List), sB the signature of the bulk metric, i coordinate index and sC=1 for space-like hypersurface and -1 for time-like hypersurface, gives the trace of the second fundamental form of the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
+NormalVector::usage="NormalVector[g,i,sC] with g components of the (0,2) \
+metric tensor (D\[Times]D Matrix), i coordinate index (Integer), sC=1 for \
+space-like hypersurface and -1 for time-like hypersurface, gives the unit \
+vector orthogonal to the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
+
+KruemmungsTensor4Index::usage=\
+	"KruemmungsTensor4Index[g,x,sB,i,sC] with g components of the bulk (0,2) \
+metric tensor (D\[Times]D Matrix), x the coordinates (D List), sB the \
+signature of the bulk metric, i coordinate index and sC=1 for space-like \
+hypersurface and -1 for time-like hypersurface, gives the (0,2) second \
+fundamental form of the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C \
+(D\[Times]D Matrix)."
+
+KruemmungsTensor4IndexSeries
+
+KruemmungsScalar4Index::usage=\
+	"KruemmungsScalar4Index[g,x,sB,i,sC] with g components of the bulk (0,2) \
+metric tensor (D\[Times]D Matrix), x the coordinates (D List), sB the \
+signature of the bulk metric, i coordinate index and sC=1 for space-like \
+hypersurface and -1 for time-like hypersurface, gives the trace of the second \
+fundamental form of the hypersurface \!\(\*SuperscriptBox[\(x\), \(i\)]\)==C."
+
+KruemmungsScalar4IndexSeries
+
+KruemmungsTensor3Index
+
+KruemmungsTensor3IndexSeries
+
+KruemmungsScalar4Vector
+
+KruemmungsScalar4Covector
+
+KruemmungsScalar3Index
+
+KruemmungsScalar3IndexSeries
 
 (*Gravitation and General Relativity*)
 
-LagrangianScalarEinstein::usage="[gLow_List,xxx_List,coeff_]:=,coeff Tr[Inverse[gLow].(TensorContract[#,{{1,5},{2,4}}]-TensorContract[#,{{1,6},{4,5}}]&[#\[TensorProduct]#&[ChristoffelSymbol2nd[gLow,xxx]]])]"
+LagrangianScalarEinstein
 
-LagrangianScalarEinsteinHilbert::usage="[gLow_List,xxx_List,coeff_]:=coeff RicciScalar[gLow,xxx];"
+LagrangianScalarEinsteinHilbert
 
-LagrangianScalarArnowittDeserMisnerIndex::usage="[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_,coeff_]:=coeff(Tr[#1.#2.#1.#2]&[Inverse[gLow],KruemmungsTensor4Index[gLow,xxx,sgnBulk,ind,sgnCell]]-KruemmungsScalar4Index[gLow,xxx,sgnBulk,ind,sgnCell\!\(\*SuperscriptBox[\(]\), \(2\)]\)+RicciScalar[Drop[MetricTensor3Index[gLow,ind,sgnCell],{ind},{ind}]]);"
+LagrangianScalarEinsteinHilbertSeries
+
+LagrangianScalarArnowittDeserMisnerIndex
 
 LagrangianScalarArnowittDeserMisnerIndexSeries
 
@@ -96,100 +176,239 @@ Begin["Private`"]
 
 (*Functions for intrinsic quantities*)
 
-InverseMetricSeries[gLow_List,eps_List]:=Series[Inverse@gLow,eps];
+VolumeElement[gLow_List?MatrixQ,sgnBulk_Integer?(#==1||#==-1&),ass_:True]:=\
+	Simplify[Sqrt[sgnBulk Det@gLow],Assumptions->ass];
 
-ChristoffelSymbol1st[gLow_List,xxx_List]:=1/2 (#2-#1[#2,{2,3,1}]+#1[#2,{3,1,2}]&)[Transpose,D[gLow,{xxx}]];
+VolumeElementSeries\
+	[gLow_List?MatrixQ,sgnBulk_Integer?(#==1||#==-1&),eps_List,ass_:True]:=\
+	Simplify[Series[VolumeElement[gLow,sgnBulk],eps],Assumptions->ass];
 
-ChristoffelSymbol1stSeries[gLow_List,xxx_List,eps_List]:=Series[ChristoffelSymbol1st[gLow,xxx],eps];
+InverseMetricSeries[gLow_List?MatrixQ,eps_List,ass_:True]:=\
+	Series[Inverse@gLow,eps];
 
-ChristoffelSymbol2nd[gLow_List,xxx_List]:=Inverse[gLow].ChristoffelSymbol1st[gLow,xxx];
+ChristoffelSymbol1st[gLow_List?MatrixQ,xxx_List,ass_:True]:=\
+	1/2 (#2-#1[#2,{2,3,1}]+#1[#2,{3,1,2}]&)[Transpose,D[gLow,{xxx}]];
 
-ChristoffelSymbol2ndSeries[gLow_List,xxx_List,eps_List]:=InverseMetricSeries[gLow,eps].ChristoffelSymbol1stSeries[gLow,xxx,eps];
+ChristoffelSymbol1stSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	Series[ChristoffelSymbol1st[gLow,xxx],eps];
 
-LeviCivitaDVector[gLow_List,xxx_List,vec_List]:=D[vec,{xxx}]+ChristoffelSymbol2nd[gLow,xxx].vec;
+ChristoffelSymbol2nd[gLow_List?MatrixQ,xxx_List,ass_:True]:=\
+	Inverse[gLow].ChristoffelSymbol1st[gLow,xxx,ass];
 
-LeviCivitaDVectorSeries[gLow_List,xxx_List,vec_List,eps_List]:=D[vec,{xxx}]+ChristoffelSymbol2ndSeries[gLow,xxx,eps].vec;
+ChristoffelSymbol2ndSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	InverseMetricSeries[gLow,eps].ChristoffelSymbol1stSeries[gLow,xxx,eps];
 
-LeviCivitaDCovector[gLow_List,xxx_List,cvt_List]:=D[cvt,{xxx}]-cvt.ChristoffelSymbol2nd[gLow,xxx];
+LeviCivitaDVector[gLow_List?MatrixQ,xxx_List,vec_List]:=\
+	D[vec,{xxx}]+ChristoffelSymbol2nd[gLow,xxx].vec;
 
-LeviCivitaDCovectorSeries[gLow_List,xxx_List,cvt_List,eps_List]:=D[cvt,{xxx}]-cvt.ChristoffelSymbol2ndSeries[gLow,xxx,eps];
+LeviCivitaDVectorSeries[gLow_List?MatrixQ,xxx_List,vec_List,eps_List]:=\
+	D[Normal[vec],{xxx}]+ChristoffelSymbol2ndSeries[gLow,xxx,eps].vec;
 
-RiemannTensor[gLow_List,xxx_List]:=((Transpose[#,{1,2,4,3}]-#&)[D[#1, {#2}]]+(#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&)[Transpose,TensorContract[#1\[TensorProduct]#1,{{2,4}}]]&)[ChristoffelSymbol2nd[gLow,xxx],xxx];
+LeviCivitaDCovector[gLow_List?MatrixQ,xxx_List,cvt_List]:=\
+	D[cvt,{xxx}]-cvt.ChristoffelSymbol2nd[gLow,xxx];
 
-RiemannTensorSeries[gLow_List,xxx_List,eps_List]:=((Transpose[#,{1,2,4,3}]-#&)[D[#1, {#2}]]+(#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&)[Transpose,TensorContract[#1\[TensorProduct]#1,{{2,4}}]]&)[ChristoffelSymbol2ndSeries[gLow,xxx,eps],xxx];
+LeviCivitaDCovectorSeries[gLow_List?MatrixQ,xxx_List,cvt_List,eps_List]:=\
+	D[Normal[cvt],{xxx}]-cvt.ChristoffelSymbol2ndSeries[gLow,xxx,eps];
 
-RicciTensor[gLow_List,xxx_List]:=TensorContract[RiemannTensor[gLow,xxx],{{1,3}}];
+RiemannTensor[gLow_List?MatrixQ,xxx_List]:=\
+	(Transpose[#,{1,2,4,3}]-#&)\
+		[D[#1, {#2}]]\
+	+(#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&)\
+		[Transpose,TensorContract[#1\[TensorProduct]#1,{{2,4}}]]&\
+			[ChristoffelSymbol2nd[gLow,xxx],xxx];
 
-RicciTensorSeries[gLow_List,xxx_List,eps_List]:=TensorContract[RiemannTensorSeries[gLow,xxx],{{1,3}}];
+RiemannTensorSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	(Transpose[#,{1,2,4,3}]-#&)\
+		[D[Normal[#1], {#2}]]\
+	+(#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&)\
+		[Transpose,(*Transpose[#1,{1,3,2}].Transpose[#1,{2,1,3}]*)\
+				TensorContract[#1\[TensorProduct]#1,{{2,4}}]]&\
+			[ChristoffelSymbol2ndSeries[gLow,xxx,eps,ass],xxx];
+	(*Block[{chr=ChristoffelSymbol2ndSeries[gLow,xxx,eps],chr2,chrd},
+		chr2=Transpose[#,{1,3,2}].Transpose[#,{2,1,3}]&[chr];
+		chrd=D[chr,{xxx}];
+		Transpose[#,{1,2,4,3}]-#&[chrd]\
+			+#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&[Transpose,chr2]
+	];*)
 
-RicciScalar[gLow_List,xxx_List]:=Tr[Inverse[gLow].RicciTensor[gLow,xxx]];
+RicciTensor[gLow_List?MatrixQ,xxx_List]:=\
+	TensorContract[RiemannTensor[gLow,xxx],{{1,3}}];
 
-RicciScalarSeries[gLow_List,xxx_List,eps_List]:=Tr[InverseMetricSeries[gLow,eps].RicciTensorSeries[gLow,xxx,eps]];
+RicciTensorSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	TensorContract[RiemannTensorSeries[gLow,xxx,eps,ass],{{1,3}}];
 
-EinsteinTensor[gLow_List,xxx_List]:=RicciTensor[gLow,xxx]-2RicciScalar[gLow,xxx]gLow/Length@gLow;
+RicciScalar[gLow_List?MatrixQ,xxx_List]:=\
+	Tr[Inverse[gLow].RicciTensor[gLow,xxx]];
 
-EinsteinTensorSeries[gLow_List,xxx_List,eps_List]:=RicciTensorSeries[gLow,xxx,eps]-2RicciScalarSeries[gLow,xxx,eps]gLow/Length@gLow;
+RicciScalarSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	Tr[InverseMetricSeries[gLow,eps].RicciTensorSeries[gLow,xxx,eps]];
+
+EinsteinTensor[gLow_List?MatrixQ,xxx_List]:=\
+	RicciTensor[gLow,xxx]-2RicciScalar[gLow,xxx]gLow/Length@gLow;
+
+EinsteinTensorSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
+	RicciTensorSeries[gLow,xxx,eps,ass]\
+		-2RicciScalarSeries[gLow,xxx,eps,ass]gLow/Length@gLow;
 
 (*Functions for extrinsic quantities*)
 
 (*Lapse etc known*)
 
-MetricTensor4[lapse_,shift_,hLow_]:=ArrayFlatten[{{shift.#-lapse^2,{#}},{{#}\[Transpose],hLow}}]&[hLow.shift];
+MetricTensor4ArnowittDeserMisner\
+	[lapse_,shift_List,hLow_List?MatrixQ]:=\
+	ArrayFlatten[{{shift.#-lapse^2,{#}},{{#}\[Transpose],hLow}}]&[hLow.shift];
 
-MetricTensor3Covector[gLow_List,norCvt_List,sgnCell_]:=gLow+sgnCell*(norCvt\[TensorProduct]norCvt);
+MetricTensor4Direct[tt_,ts_List,ss_List]:=\
+	ArrayFlatten[{{tt,{ts}},{{ts}\[Transpose],ss}}];
 
-MetricTensor3Vector[gLow_List,norVec_List,sgnCell_]:=MetricTensor3Covector[gLow,gLow.norVec,sgnCell];
+MetricTensor34Covector\
+	[gLow_List?MatrixQ,norCvt_List,sgnCell_Integer?(#==1||#==-1&)]:=\
+	gLow+sgnCell*(norCvt\[TensorProduct]norCvt);
 
-MetricTensor3Index[gLow_List,ind_Integer,sgnCell_]:=MetricTensor3Covector[gLow,NormalCovector[gLow,ind,sgnCell],sgnCell];
+MetricTensor34Vector\
+	[gLow_List?MatrixQ,norVec_List,sgnCell_Integer?(#==1||#==-1&)]:=\
+	MetricTensor34Covector[gLow,gLow.norVec,sgnCell];
 
-(*Suppose the metric is d+1 decomposed; nUpp=n^\[Mu]. I believe these are to be improved.*)
+MetricTensor34Index\
+	[gLow_List?MatrixQ,ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	MetricTensor34Covector[gLow,NormalCovector[gLow,ind,sgnCell,ass],sgnCell];
 
-NormalCovector[gLow_List,ind_Integer,sgnCell_]:=Array[If[#==ind,-sgnCell/Sqrt[-sgnCell Inverse[gLow][[ind,ind]]],0]&,Length@gLow];
+MetricTensor3Index\
+	[gLow_List?MatrixQ,ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	Drop[MetricTensor34Index[gLow,ind,sgnCell,ass],{ind},{ind}];
 
-NormalVector[gLow_List,ind_Integer,sgnCell_]:=-sgnCell/Sqrt[-sgnCell*#[[ind,ind]]] #[[ind]]&[Inverse[gLow]];
+(* Suppose the metric is d+1 decomposed; nUpp=n^\[Mu].
+ * I believe these are to be improved. *)
 
-KruemmungsTensor4Index[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_]:=MetricTensor3Covector[gLow,#,sgnCell].Inverse[gLow].LeviCivitaDCovector[gLow,xxx,#]&[NormalCovector[gLow,ind,sgnCell]];
+NormalCovector\
+	[gLow_List?MatrixQ,ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	Array[If[#==ind,Simplify[-sgnCell
+			Sqrt[1/Together[-sgnCell Inverse[gLow][[ind,ind]]]],Assumptions->ass],0]&,\
+		Length@gLow];
 
-(*KruemmungsTensor4IndexSeries[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_,eps_]:=
-	MetricTensor3Covector[gLow,#,sgnCell].InverseMetricSeries[gLow,eps].LeviCivitaDCovectorSeries[gLow,xxx,#,eps]&[NormalCovector[gLow,ind,sgnCell]];*)
+NormalVector\
+	[gLow_List?MatrixQ,ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	Simplify[-sgnCell Sqrt[1/Together[-sgnCell*#[[ind,ind]]]],Assumptions->ass] #[[ind]]&\
+		[Inverse[gLow]];
 
-KruemmungsScalar4Index[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_]:=1/#1 Div[#1*#2,xxx]&[Sqrt[sgnBulk*Det@gLow],NormalVector[gLow,ind,sgnCell]];
+KruemmungsTensor4Index\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	MetricTensor34Covector[gLow,#,sgnCell].Inverse[gLow].\
+		LeviCivitaDCovector[gLow,xxx,#]&\
+		[Simplify[NormalCovector[gLow,ind,sgnCell],Assumptions->ass]];
 
-(*KruemmungsScalar4IndexSeries[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_]:=1/#1 Div[#1*#2,xxx]&[Sqrt[sgnBulk*Det@gLow],NormalVectorSeries[gLow,ind,sgnCell]];*)
+KruemmungsTensor4IndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),eps_List,ass_:True]:=\
+	MetricTensor34Covector[gLow,#,sgnCell].InverseMetricSeries[gLow,eps].\
+			LeviCivitaDCovectorSeries[gLow,xxx,#,eps]&\
+		[Simplify[Normal@Series[NormalCovector[gLow,ind,sgnCell],eps],\
+			Assumptions->ass]];
+
+KruemmungsTensor3Index\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	Drop[KruemmungsTensor4Index[gLow,xxx,sgnBulk,ind,sgnCell,ass],{ind},{ind}];
+
+KruemmungsTensor3IndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),eps_List,ass_:True]:=\
+	Drop[MetricTensor34Covector[gLow,#,sgnCell].InverseMetricSeries[gLow,eps].\
+			LeviCivitaDCovectorSeries[gLow,xxx,#,eps]&\
+		[Simplify[Normal@Series[NormalCovector[gLow,ind,sgnCell],eps],\
+			Assumptions->ass]],\
+	{ind},{ind}];
+
+KruemmungsScalar4Vector\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		norVec_List,ass_:True]:=\
+	1/# Div[#*norVec,xxx]&[VolumeElement[gLow,sgnBulk,ass]];
+
+KruemmungsScalar4Covector\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		norCvt_List,ass_:True]:=\
+	KruemmungsScalar4Vector[gLow,xxx,sgnBulk,Inverse[gLow].norCvt,ass];
+
+KruemmungsScalar4Index\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	1/#1 Div[#1*#2,xxx]&\
+		[VolumeElement[gLow,sgnBulk,ass],NormalVector[gLow,ind,sgnCell,ass]];
+
+KruemmungsScalar4IndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),eps_List,ass_:True]:=\
+	1/#1 Div[Normal[#1*#2],xxx]&\
+		[VolumeElementSeries[gLow,sgnBulk,eps,ass],NormalVector[gLow,ind,sgnCell]];
+
+KruemmungsScalar3Index\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),\
+		ind_Integer,sgnCell_Integer?(#==1||#==-1&),ass_:True]:=\
+	Tr[Inverse@MetricTensor3Index[gLow,ind,sgnCell].
+		KruemmungsTensor3Index[gLow,xxx,sgnBulk,ind,sgnCell,ass]];
+
+KruemmungsScalar3IndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),ind_Integer,sgnCell_Integer?(#==1||#==-1&),eps_List,ass_:True]:=\
+	Tr[Inverse@MetricTensor3Index[gLow,ind,sgnCell].
+		KruemmungsTensor3IndexSeries[gLow,xxx,sgnBulk,ind,sgnCell,eps,ass]];
+
+(*KruemmungsScalar4IndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),ind_Integer,sgnCell_Integer?(#==1||#==-1&)]:=\
+		1/#1 Div[#1*#2,xxx]&\
+			[Sqrt[sgnBulk*Det@gLow],NormalVectorSeries[gLow,ind,sgnCell]];*)
 
 (*General Relativity*)
 
-LagrangianScalarEinstein[gLow_List,xxx_List,coeff_]:=coeff Tr[Inverse[gLow].(TensorContract[#,{{1,5},{2,4}}]-TensorContract[#,{{1,6},{4,5}}]&[#\[TensorProduct]#&[ChristoffelSymbol2nd[gLow,xxx]]])];
+LagrangianScalarEinstein[gLow_List?MatrixQ,xxx_List,coeff_]:=\
+	coeff Tr[Inverse[gLow].(TensorContract[#,{{1,5},{2,4}}]-
+		TensorContract[#,{{1,6},{4,5}}]&\
+			[#\[TensorProduct]#&\
+		[ChristoffelSymbol2nd[gLow,xxx]]])];
 
-LagrangianScalarEinsteinHilbert[gLow_List,xxx_List,coeff_]:=coeff RicciScalar[gLow,xxx];
+LagrangianScalarEinsteinHilbert[gLow_List?MatrixQ,xxx_List,coeff_]:=\
+	coeff RicciScalar[gLow,xxx];
 
-LagrangianScalarArnowittDeserMisnerIndex[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_,coeff_]:=coeff
-	(Tr[#1.#2.#1.#2]&[Inverse[gLow],KruemmungsTensor4Index[gLow,xxx,sgnBulk,ind,sgnCell]]
-		-KruemmungsScalar4Index[gLow,xxx,sgnBulk,ind,sgnCell]^2
-		+RicciScalar[Drop[MetricTensor3Index[gLow,ind,sgnCell],{ind},{ind}],Delete[xxx,ind]]);
+LagrangianScalarEinsteinHilbertSeries\
+	[gLow_List?MatrixQ,xxx_List,coeff_,eps_List,ass_:True]:=\
+	coeff RicciScalarSeries[gLow,xxx,eps,ass];
 
-(*LagrangianScalarArnowittDeserMisnerIndexSeries[gLow_List,xxx_List,sgnBulk_,ind_Integer,sgnCell_,coeff_,eps_]:=coeff
-	(Tr[#1.#2.#1.#2]&[InverseMetricSeries[gLow,eps],KruemmungsTensor4IndexSeries[gLow,xxx,sgnBulk,ind,sgnCell,eps]]
-		-KruemmungsScalar4IndexSeries[gLow,xxx,sgnBulk,ind,sgnCell,eps]^2
-		+RicciScalarSeries[Drop[MetricTensor3Index[gLow,ind,sgnCell],{ind},{ind}],Delete[xxx,ind],eps]);*)
+LagrangianScalarArnowittDeserMisnerIndex\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),ind_Integer,sgnCell_Integer?(#==1||#==-1&),coeff_]:=\
+	coeff(Tr[#1.#2.#1.#2]&\
+		[Inverse@#,
+		KruemmungsTensor3Index[gLow,xxx,sgnBulk,ind,sgnCell]]\
+	-KruemmungsScalar3Index[gLow,xxx,sgnBulk,ind,sgnCell]^2\
+	+RicciScalar[#,Delete[xxx,ind]])&\
+		[MetricTensor3Index[gLow,ind,sgnCell]];
 
-End[] (*"Private`"*)L
+LagrangianScalarArnowittDeserMisnerIndexSeries\
+	[gLow_List?MatrixQ,xxx_List,sgnBulk_Integer?(#==1||#==-1&),ind_Integer,\
+		sgnCell_Integer?(#==1||#==-1&),coeff_,eps_List,ass_:True]:=\
+	coeff(Tr[MatrixPower[#1.#2,2]]&\
+		[InverseMetricSeries[#,eps],
+		KruemmungsTensor3IndexSeries[gLow,xxx,sgnBulk,ind,sgnCell,eps,ass]]\
+	-KruemmungsScalar3IndexSeries[gLow,xxx,sgnBulk,ind,sgnCell,eps,ass]^2\
+	+RicciScalarSeries[#,Delete[xxx,ind],eps,ass])&\
+		[MetricTensor3Index[gLow,ind,sgnCell]];
+
+End[] (*"Private`"*)
 
 Begin["Experimental`"]
 
 (*https://en.wikipedia.org/wiki/Weyl_tensor*)
 
-WeylTensor[gLow_List,xxx_List]:=RiemannTensorLow[gLow,xxx]+(-(1/(#-2))(+#1[#2,{1,4,2,3}]-#1[#2,{1,3,2,4}]+#1[#2,{2,3,1,4}]-#1[#2,{2,4,1,3}]&)[Transpose,RicciTensor[gLow]\[TensorProduct]gLow]+RicciScalar[gLow,xxx]/((#-1)(#-2)) (#1[#2,{1,3,2,4}]-#2&)[Transpose,gLow\[TensorProduct]gLow]&)[Length@gLow];
+WeylTensor[gLow_List?MatrixQ,xxx_List]:=RiemannTensorLow[gLow,xxx]+(-(1/(#-2))(+#1[#2,{1,4,2,3}]-#1[#2,{1,3,2,4}]+#1[#2,{2,3,1,4}]-#1[#2,{2,4,1,3}]&)[Transpose,RicciTensor[gLow]\[TensorProduct]gLow]+RicciScalar[gLow,xxx]/((#-1)(#-2)) (#1[#2,{1,3,2,4}]-#2&)[Transpose,gLow\[TensorProduct]gLow]&)[Length@gLow];
 
 (*https://en.wikipedia.org/wiki/Ricci_decomposition*)
 
-RicciTensorTraceless[gLow_List,xxx_List]:=RicciTensor[gLow,xxx]-(RicciScalar[gLow,xxx]gLow)/Length@gLow;
+RicciTensorTraceless[gLow_List?MatrixQ,xxx_List]:=RicciTensor[gLow,xxx]-(RicciScalar[gLow,xxx]gLow)/Length@gLow;
 
-RiemannTensorLow[gLow_List,xxx_List]:=gLow.RiemannTensor[gLow,xxx];
+RiemannTensorLow[gLow_List?MatrixQ,xxx_List]:=gLow.RiemannTensor[gLow,xxx];
 
-RiemannTensorScalar[gLow_List,xxx_List]:=RicciScalar[gLow,xxx]/(#(#-1)) (#1[#2,{1,3,4,2}]-#1[#2,{1,4,3,2}]&)[Transpose,gLow\[TensorProduct]gLow]&[Length@gLow];
+RiemannTensorScalar[gLow_List?MatrixQ,xxx_List]:=RicciScalar[gLow,xxx]/(#(#-1)) (#1[#2,{1,3,4,2}]-#1[#2,{1,4,3,2}]&)[Transpose,gLow\[TensorProduct]gLow]&[Length@gLow];
 
-RiemannTensorSemiTraceless[gLow_List,xxx_List]:=1/(Length@gLow-2) (#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]+#1[#2,{2,4,1,3}]-#1[#2,{2,3,1,4}]&)[Transpose,gLow\[TensorProduct]RicciTensorTraceless[gLow,xxx]];
+RiemannTensorSemiTraceless[gLow_List?MatrixQ,xxx_List]:=1/(Length@gLow-2) (#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]+#1[#2,{2,4,1,3}]-#1[#2,{2,3,1,4}]&)[Transpose,gLow\[TensorProduct]RicciTensorTraceless[gLow,xxx]];
 
 End[] (*"Experimental`"*)
 
