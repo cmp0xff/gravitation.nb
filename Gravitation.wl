@@ -19,7 +19,11 @@
 
 BeginPackage["Gravitation`"]
 
-(*Riemannian formalism*)
+(*Holonomic formalism*)
+
+(*Tensor algebra*)
+
+KulkarniNomizu
 
 (*Functions for intrinsic quantities*)
 
@@ -60,6 +64,8 @@ curvature tensor (D\[Times]D\[Times]D\[Times]D List)."
 
 RiemannTensorSeries
 
+RiemannTensorLow
+
 RicciTensor::usage=
 	"RicciTensor[g,x], with g components of the (0,2) metric tensor \
 (D\[Times]D Matrix) and x the coordinates (D List), gives the (0,2) Ricci \
@@ -79,6 +85,14 @@ EinsteinTensor::usage=\
 tensor (D\[Times]D Matrix)."
 
 EinsteinTensorSeries
+
+RicciTensorTraceless
+
+RiemannTensorScalar
+
+RiemannTensorSemiTraceless
+
+WeylTensor
 
 (*Functions for extrinsic quantities*)
 
@@ -176,7 +190,15 @@ LagrangianScalarArnowittDeserMisnerIndexSeries
 
 Begin["Private`"]
 
-(*Riemannian formalism*)
+(*Holonomic formalism*)
+
+(*Tensor algebra*)
+
+(*https://en.wikipedia.org/wiki/Kulkarni%E2%80%93Nomizu_product*)
+
+KulkarniNomizu[h_List?MatrixQ,k_List?MatrixQ]:=\
+	#1[#2,{1,3,2,4}]+#1[#2,{2,4,1,3}]-#1[#2,{1,4,2,3}]-#1[#2,{2,3,1,4}]&\
+		[Transpose,h\[TensorProduct]k];
 
 (*Functions for intrinsic quantities*)
 
@@ -228,12 +250,8 @@ RiemannTensorSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
 		[Transpose,(*Transpose[#1,{1,3,2}].Transpose[#1,{2,1,3}]*)\
 				TensorContract[#1\[TensorProduct]#1,{{2,4}}]]&\
 			[ChristoffelSymbol2ndSeries[gLow,xxx,eps,ass],xxx];
-	(*Block[{chr=ChristoffelSymbol2ndSeries[gLow,xxx,eps],chr2,chrd},
-		chr2=Transpose[#,{1,3,2}].Transpose[#,{2,1,3}]&[chr];
-		chrd=D[chr,{xxx}];
-		Transpose[#,{1,2,4,3}]-#&[chrd]\
-			+#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]&[Transpose,chr2]
-	];*)
+			
+RiemannTensorLow[gLow_List?MatrixQ,xxx_List]:=gLow.RiemannTensor[gLow,xxx];
 
 RicciTensor[gLow_List?MatrixQ,xxx_List]:=\
 	TensorContract[RiemannTensor[gLow,xxx],{{1,3}}];
@@ -253,6 +271,33 @@ EinsteinTensor[gLow_List?MatrixQ,xxx_List]:=\
 EinsteinTensorSeries[gLow_List?MatrixQ,xxx_List,eps_List,ass_:True]:=\
 	RicciTensorSeries[gLow,xxx,eps,ass]\
 		-2RicciScalarSeries[gLow,xxx,eps,ass]gLow/Length@gLow;
+
+(*https://en.wikipedia.org/wiki/Ricci_decomposition*)
+
+RicciTensorTraceless[gLow_List?MatrixQ,xxx_List]:=\
+	RicciTensor[#1,#2]-(RicciScalar[#1,#2]#1)/Length@#1&\
+		[gLow,xxx];
+
+RiemannTensorScalar[gLow_List?MatrixQ,xxx_List]:=\
+	KulkarniNomizu[#1,#1]RicciScalar[#1,#2]/(2#3(#3-1))&[gLow,xxx,Length@gLow];
+	(*RicciScalar[gLow,xxx]/(#(#-1)) (#1[#2,{1,3,4,2}]-#1[#2,{1,4,3,2}]&)[Transpose,gLow\[TensorProduct]gLow]&[Length@gLow];*)
+
+RiemannTensorSemiTraceless[gLow_List?MatrixQ,xxx_List]:=
+	KulkarniNomizu[#1,RicciTensorTraceless[#1,#2]]/(#3-2)&[gLow,xxx,Length@gLow];
+	(*1/(Length@gLow-2) (#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]+#1[#2,{2,4,1,3}]-#1[#2,{2,3,1,4}]&)[Transpose,gLow\[TensorProduct]RicciTensorTraceless[gLow,xxx]];*)
+
+(*https://en.wikipedia.org/wiki/Weyl_tensor*)
+
+WeylTensor[gLow_List?MatrixQ,xxx_List]:=\
+	RiemannTensorLow[#1,#2]-RiemannTensorSemiTraceless[#1,#2]-RiemannTensorScalar[#1,#2]&\
+		[gLow,xxx];
+	(*-KulkarniNomizu[(RicciTensor[#1,#2]/(#3-2)+RicciScalar[#1,#2](1/(2#3(#3-1))-1/((#3-2)#3)))\
+		#1,#1]&[gLow,xxx,Length@gLow];*)
+	(*RiemannTensorLow[gLow,xxx]+\
+	(-(1/(#-2))(+#1[#2,{1,4,2,3}]-#1[#2,{1,3,2,4}]+#1[#2,{2,3,1,4}]-#1[#2,{2,4,1,3}]&)\
+			[Transpose,RicciTensor[gLow,xxx]\[TensorProduct]gLow]\
+		+RicciScalar[gLow,xxx]/((#-1)(#-2)) (#1[#2,{1,3,2,4}]-#2&)\
+			[Transpose,gLow\[TensorProduct]gLow]&)[Length@gLow];*)
 
 (*Functions for extrinsic quantities*)
 
@@ -422,20 +467,6 @@ LagrangianScalarArnowittDeserMisnerIndexSeries\
 End[] (*"Private`"*)
 
 Begin["Experimental`"]
-
-(*https://en.wikipedia.org/wiki/Weyl_tensor*)
-
-WeylTensor[gLow_List?MatrixQ,xxx_List]:=RiemannTensorLow[gLow,xxx]+(-(1/(#-2))(+#1[#2,{1,4,2,3}]-#1[#2,{1,3,2,4}]+#1[#2,{2,3,1,4}]-#1[#2,{2,4,1,3}]&)[Transpose,RicciTensor[gLow]\[TensorProduct]gLow]+RicciScalar[gLow,xxx]/((#-1)(#-2)) (#1[#2,{1,3,2,4}]-#2&)[Transpose,gLow\[TensorProduct]gLow]&)[Length@gLow];
-
-(*https://en.wikipedia.org/wiki/Ricci_decomposition*)
-
-RicciTensorTraceless[gLow_List?MatrixQ,xxx_List]:=RicciTensor[gLow,xxx]-(RicciScalar[gLow,xxx]gLow)/Length@gLow;
-
-RiemannTensorLow[gLow_List?MatrixQ,xxx_List]:=gLow.RiemannTensor[gLow,xxx];
-
-RiemannTensorScalar[gLow_List?MatrixQ,xxx_List]:=RicciScalar[gLow,xxx]/(#(#-1)) (#1[#2,{1,3,4,2}]-#1[#2,{1,4,3,2}]&)[Transpose,gLow\[TensorProduct]gLow]&[Length@gLow];
-
-RiemannTensorSemiTraceless[gLow_List?MatrixQ,xxx_List]:=1/(Length@gLow-2) (#1[#2,{1,3,2,4}]-#1[#2,{1,4,2,3}]+#1[#2,{2,4,1,3}]-#1[#2,{2,3,1,4}]&)[Transpose,gLow\[TensorProduct]RicciTensorTraceless[gLow,xxx]];
 
 End[] (*"Experimental`"*)
 
